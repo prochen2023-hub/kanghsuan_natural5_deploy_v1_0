@@ -1,0 +1,14 @@
+{
+  "name": "自然探究實驗室｜康軒五上自然",
+  "short_name": "自然探究實驗室",
+  "description": "康軒版國小五年級上學期自然互動學習網站：12個活動、探究實驗、遊戲、錯題救援與段考A/B卷。",
+  "lang": "zh-Hant-TW",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4fbf9",
+  "theme_color": "#0f766e",
+  "icons": [
+    {"src":"./assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
