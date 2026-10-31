@@ -1,4 +1,4 @@
-# 自然探究實驗室｜康軒版國小五上自然 v2.0.0
+# 自然探究實驗室｜康軒版國小五上自然 v2.1.0
 
 純靜態網站，可直接部署到 GitHub Pages，不需要 npm、Vite 或編譯。
 
@@ -10,14 +10,14 @@ GitHub → Settings → Pages → Build and deployment：
 - Branch: `deploy`（或你指定的發布 branch）
 - Folder: `/(root)`
 
-Windows 可先雙擊 `VERIFY_DEPLOY.bat` 做必要檔案、JavaScript 語法與 v2.0 資料結構檢查，再使用 `PUSH_DEPLOY.bat`。
+Windows 可先雙擊 `VERIFY_DEPLOY.bat` 做必要檔案、JavaScript 語法與 v2.1 資料結構檢查，再使用 `PUSH_DEPLOY.bat`。
 
 ## 更新辨識
 左上角應顯示：
 - `國小五上・自然科・康軒版`
-- `自然探究實驗室 v2.0`
+- `自然探究實驗室 v2.1`
 
-## v2.0 大改版重點
+## v2.1 大改版重點
 - 首頁維持「只看目前單元」；不顯示整學期大地圖。
 - 第一、二單元六課改寫成「生活現場 → 科學破案 → 實驗環 → 找證據 → 一句記住 → 6題挑戰 → 救援」。
 - 六課共有 45 個細部概念小節，改成折疊式破案卡；一次只展開一張，避免文字牆。
@@ -36,3 +36,10 @@ Windows 可先雙擊 `VERIFY_DEPLOY.bat` 做必要檔案、JavaScript 語法與 
 - 右上角只提供「研究員名字」簡易設定，不需帳號、密碼或 PIN。
 - 進度、星星、錯題、A／B 卷成績存在該瀏覽器 `localStorage`。
 - 朗讀使用裝置內建 Web Speech 中文語音；不同手機／電腦的人聲略有差異。
+
+## v2.1 修復重點
+
+- 第二單元 24 張科學破案卡改為 24 種獨立圖解。
+- 喇叭朗讀擴充至生活情境、mini lab、遊戲、救援與考後解析。
+- 聲音模擬改用可 resume 的 persistent AudioContext，並新增 440 Hz 測試音。
+- `qa_v21.js` 驗證 U2 24/24 SVG 實際輸出皆不同。

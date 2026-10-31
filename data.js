@@ -1,5 +1,5 @@
 window.NATURAL5_DATA = {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "title": "五上自然探究實驗室",
   "edition": "康軒版・115學年度",
   "units": [
