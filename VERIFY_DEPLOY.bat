@@ -20,6 +20,7 @@ if %errorlevel%==0 (
   node --check app.js || set FAIL=1
   node --check data.js || set FAIL=1
   node --check sw.js || set FAIL=1
+  if exist "qa_v20.js" node qa_v20.js || set FAIL=1
 ) else (
   echo [INFO] Node.js not installed; skipped JavaScript syntax check.
 )

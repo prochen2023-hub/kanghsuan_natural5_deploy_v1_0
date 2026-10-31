@@ -1,0 +1,41 @@
+const fs=require('fs'), vm=require('vm');
+const root='/mnt/data/natural_v12_work';
+const sandbox={window:{}}; vm.createContext(sandbox); vm.runInContext(fs.readFileSync(root+'/data.js','utf8'),sandbox);
+const D=sandbox.window.NATURAL5_DATA; const out=[]; const pass=(name,cond,extra='')=>{out.push(`${cond?'PASS':'FAIL'} ${name}${extra?' — '+extra:''}`); if(!cond) process.exitCode=1;};
+pass('version 2.0.0',D.version==='2.0.0',D.version);
+pass('12 lessons',D.lessons.length===12,String(D.lessons.length));
+const first6=D.lessons.slice(0,6);
+pass('first six have >=30 questions',first6.every(l=>l.questions?.length>=30),first6.map(l=>l.questions.length).join(','));
+pass('first six have >=3 life scenes',first6.every(l=>l.lifeScenes?.length>=3),first6.map(l=>l.lifeScenes?.length||0).join(','));
+pass('first six have >=3 mini labs',first6.every(l=>l.miniLabs?.length>=3),first6.map(l=>l.miniLabs?.length||0).join(','));
+pass('first six have >=5 detail sections',first6.every(l=>l.detailSections?.length>=5),first6.map(l=>l.detailSections?.length||0).join(','));
+let allQ=[]; D.lessons.forEach(l=>(l.questions||[]).forEach(q=>allQ.push(q.id)));
+pass('lesson question ids unique',new Set(allQ).size===allQ.length,`${new Set(allQ).size}/${allQ.length}`);
+const match1=D.matching?.u1||[], match2=D.matching?.u2||[];
+const cls1=D.classify?.u1?.items||[], cls2=D.classify?.u2?.items||[];
+pass('U1 matching rich',match1.length>=30,`count=${match1.length}`);
+pass('U2 matching rich',match2.length>=30,`count=${match2.length}`);
+pass('U1 classify rich',cls1.length>=20,`count=${cls1.length}`);
+pass('U2 classify rich',cls2.length>=20,`count=${cls2.length}`);
+for(const key of ['midA','midB']){
+ const e=(D.exams||[]).find(x=>x.id===key); pass(`${key} exists`,!!e); if(!e)continue;
+ const items=e.questions||[];
+ const score=items.reduce((a,q)=>a+(q.points||0),0);
+ pass(`${key} 39 answer items`,items.length===39,String(items.length));
+ pass(`${key} 100 points`,score===100,String(score));
+ pass(`${key} 40 minutes`,e.time===40,String(e.time));
+ pass(`${key} question ids unique`,new Set(items.map(q=>q.id)).size===items.length);
+ const types=new Set(items.map(q=>q.type)); pass(`${key} mixed item types`,types.size>=5,[...types].join(','));
+}
+const html=fs.readFileSync(root+'/index.html','utf8');
+pass('index cache bust 2.0.0',!html.includes('1.1.0') && (html.match(/2\.0\.0/g)||[]).length>=3);
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]); pass('HTML IDs unique',new Set(ids).size===ids.length,`${new Set(ids).size}/${ids.length}`);
+for(const f of ['app.js','data.js','index.html','styles.css']){const t=fs.readFileSync(root+'/'+f,'utf8');pass(`${f} no TODO placeholders`,!/TODO|FIXME|TBD|PLACEHOLDER/.test(t));}
+const visuals=new Set(); first6.forEach(l=>(l.detailSections||[]).forEach(x=>{if(x.visual) visuals.add(x.visual)}));
+const app=fs.readFileSync(root+'/app.js','utf8');
+const handlerGroups=[['teeth'],['beaks'],['temperature'],['migration'],['camouflage','defense','mimicry'],['ants'],['bees'],['bee_dance','bee_science'],['macaque'],['social'],['signals'],['soundbox'],['reproduction_cycle','courtship','nest','fertilization','birth','parentalcare','inheritance'],['noise_context','decibel','wave_amp','noise_control','hearing'],['instrument_types'],['frequency'],['strings'],['air_column'],['percussion'],['sound_three'],['voice'],['straight_light'],['refraction'],['mirage'],['convex','lens_image','focus_safe'],['myopia'],['rainbow'],['bubble'],['light_sound'],['aquarium']];
+const handled=new Set(handlerGroups.flat()); const missing=[...visuals].filter(v=>!handled.has(v));
+pass('all U1/U2 visual types handled',missing.length===0,missing.join(','));
+pass('v2 accordion exists',app.includes('detail-fold') && app.includes('科學破案卡'));
+console.log(out.join('\n'));
+console.log('\nKEYS',Object.keys(D));
